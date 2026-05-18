@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   basePath: '/SNITIS',
-  assetPrefix: '/SNITIS',
+
 
   
   async redirects() {
