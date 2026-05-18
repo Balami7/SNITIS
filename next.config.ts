@@ -1,19 +1,14 @@
-import type { NextConfig } from "next";
-
 const nextConfig: NextConfig = {
-  basePath: '/SNITIS',
+  assetPrefix: '/SNITIS',   // keeps asset URLs correct
+  // no basePath
 
-
-  
   async redirects() {
     return [
       {
-        source: '/',
+        source: '/:path*',
         destination: '/SNITIS',
         permanent: true,
       },
     ];
   },
 };
-
-export default nextConfig;
