@@ -1,5 +1,6 @@
- @type {import('next').NextConfig} 
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   basePath: "/SNITIS",
   images: {
     unoptimized: true,
@@ -9,11 +10,11 @@ const nextConfig = {
       {
         source: '/',
         destination: '/SNITIS',
-        basePath: false,  
-        permanent: true, 
+        basePath: false,
+        permanent: true,
       },
     ];
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
