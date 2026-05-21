@@ -32,7 +32,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const fetchRegistrations = async () => {
       try {
-        const res = await fetch("/api/admin/registrations", {
+        const res = await fetch("/SNITIS/api/admin/registrations", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -59,7 +59,7 @@ export default function AdminDashboardPage() {
   const handleLogout = async () => {
     setLoggingOut(true);
     try {
-      const res = await fetch("/api/admin/logout", {
+      const res = await fetch("/SNITIS/api/admin/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
