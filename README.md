@@ -147,6 +147,4 @@ This app can be deployed on Vercel or any platform that supports Next.js and Pos
 - The admin section currently uses a simple cookie-based auth token and should be hardened before production use.
 - The registration export generates an `.xlsx` file with all stored registration records.
 
-## License
 
-This repository does not include a license file. Add one if you want to open source the project.
