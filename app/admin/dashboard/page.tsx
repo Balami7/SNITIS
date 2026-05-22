@@ -7,7 +7,7 @@ interface RegistrationRecord {
   id: string;
   first_name: string;
   last_name: string;
-  number_of_guests: number;
+  guest_category?: string;        // New field - optional
   position: string;
   organisation: string;
   address: {
@@ -76,31 +76,40 @@ export default function AdminDashboardPage() {
     }
   };
 
- 
   const exportToExcel = () => {
     if (records.length === 0) return;
 
-   
-    const headers = ["First Name", "Last Name", "Guests", "Position", "Organisation", "Email", "Phone", "Building/Apt", "Street", "City", "State", "Country"];
-
+    const headers = [
+      "First Name", 
+      "Last Name", 
+      "Guest Category", 
+      "Position", 
+      "Organisation", 
+      "Email", 
+      "Phone", 
+      "Building/Apt", 
+      "Street", 
+      "City", 
+      "State", 
+      "Country"
+    ];
 
     const rows = records.map(r => [
       `"${r.first_name.replace(/"/g, '""')}"`,
       `"${r.last_name.replace(/"/g, '""')}"`,
-      `"${r.number_of_guests}"`,
+      `"${r.guest_category || 'Not Selected'}"`,
       `"${r.position.replace(/"/g, '""')}"`,
       `"${r.organisation.replace(/"/g, '""')}"`,
       `"${r.email.replace(/"/g, '""')}"`,
       `"${r.phone.replace(/"/g, '""')}"`,
-      `"${r.address.building_apart.replace(/"/g, '""')}"`,
-      `"${r.address.street.replace(/"/g, '""')}"`,
-      `"${r.address.city.replace(/"/g, '""')}"`,
-      `"${r.address.state.replace(/"/g, '""')}"`,
-      `"${r.address.country.replace(/"/g, '""')}"`
+      `"${(r.address.building_apart || '').replace(/"/g, '""')}"`,
+      `"${(r.address.street || '').replace(/"/g, '""')}"`,
+      `"${(r.address.city || '').replace(/"/g, '""')}"`,
+      `"${(r.address.state || '').replace(/"/g, '""')}"`,
+      `"${(r.address.country || '').replace(/"/g, '""')}"`
     ]);
 
     const csvContent = [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
-    
     
     const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -112,7 +121,6 @@ export default function AdminDashboardPage() {
     document.body.removeChild(link);
   };
 
-  
   const exportToPDF = () => {
     window.print();
   };
@@ -132,7 +140,11 @@ export default function AdminDashboardPage() {
               <p className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest">Sub-National Roundtable Portal</p>
             </div>
           </div>
-          <button onClick={handleLogout} disabled={loggingOut} className="border border-red-700 hover:bg-red-700 hover:text-white transition-all px-4 py-2 text-xs font-black uppercase tracking-widest text-black rounded-sm disabled:opacity-50 print:hidden" >
+          <button 
+            onClick={handleLogout} 
+            disabled={loggingOut} 
+            className="border border-red-700 hover:bg-red-700 hover:text-white transition-all px-4 py-2 text-xs font-black uppercase tracking-widest text-black rounded-sm disabled:opacity-50 print:hidden" 
+          >
             {loggingOut ? "Exiting..." : "Log Out"}
           </button>
         </div>
@@ -155,7 +167,6 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        
         {!loading && records.length > 0 && (
           <div className="flex justify-end gap-3 mb-4 print:hidden">
             <button 
@@ -198,7 +209,7 @@ export default function AdminDashboardPage() {
                     <th className="p-4 border-r border-black print:p-2 print:w-1/5">Position / Organisation</th>
                     <th className="p-4 border-r border-black print:p-2 print:w-1/5">Contact Details</th>
                     <th className="p-4 border-r border-black print:p-2 print:w-1/5">Location Address</th>
-                    <th className="p-4 print:p-2 print:w-1/5">Guests</th>
+                    <th className="p-4 print:p-2 print:w-1/5">Guest Category</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 text-xs text-black print:divide-y-2 print:divide-black">
@@ -224,8 +235,12 @@ export default function AdminDashboardPage() {
                           {attendee.address.city}, {attendee.address.state}, {attendee.address.country}
                         </div>
                       </td>
-                      <td className="p-4 print:p-2 text-center font-bold">
-                        {attendee.number_of_guests}
+                      <td className="p-4 print:p-2 text-center font-medium">
+                        {attendee.guest_category ? (
+                          <span className="text-emerald-700">{attendee.guest_category}</span>
+                        ) : (
+                          <span className="text-black/40 italic">Not Selected</span>
+                        )}
                       </td>
                     </tr>
                   ))}

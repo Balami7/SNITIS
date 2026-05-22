@@ -3,6 +3,24 @@
 import { useState, useEffect } from "react";
 import { Country, State, City } from "country-state-city";
 
+const guestCategories = [
+  "VVIP / Special Guest",
+  "State Government Delegation",
+  "Sponsor",
+  "Investor",
+  "Diplomatic Community",
+  "International Delegation / Development Partner",
+  "Chamber of Commerce / Business Association",
+  "Professional Association / Cooperative Society",
+  "Publication Committee",
+  "Speaker / Facilitator / Panelist",
+  "Media / Press",
+  "Government Agency Representative",
+  "Diaspora Participant",
+  "Protocol / Security / Logistics",
+  "General Participant / Guest"
+];
+
 export default function RegistrationPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -10,7 +28,7 @@ export default function RegistrationPage() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [numberOfGuests, setNumberOfGuests] = useState(1);
+  const [guestCategory, setGuestCategory] = useState("");
   const [position, setPosition] = useState("");
   const [organisation, setOrganisation] = useState("");
   const [phone, setPhone] = useState("");
@@ -21,6 +39,9 @@ export default function RegistrationPage() {
   const [selectedCity, setSelectedCity] = useState("");
   const [buildingApart, setBuildingApart] = useState("");
   const [street, setStreet] = useState("");
+
+  // Optional label component
+  const optionalLabel = <span className="text-black/40 font-normal text-xs ml-1">(optional)</span>;
 
   useEffect(() => {
     setSelectedState("");
@@ -48,7 +69,10 @@ export default function RegistrationPage() {
     setSuccessMessage("");
 
     const err = validateForm();
-    if (err) { setError(err); return; }
+    if (err) { 
+      setError(err); 
+      return; 
+    }
 
     setLoading(true);
 
@@ -58,7 +82,7 @@ export default function RegistrationPage() {
     const payload = {
       first_name: firstName,
       last_name: lastName,
-      number_of_guests: numberOfGuests,
+      guest_category: guestCategory || null,
       position,
       organisation,
       address: {
@@ -95,7 +119,6 @@ export default function RegistrationPage() {
   };
 
   const inputClass = "w-full bg-white border border-black/70 text-black text-sm px-4 py-3 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all placeholder:text-black/40 rounded-sm";
-  const optionalLabel = <span className="text-black/40 font-normal text-xs ml-1">(optional)</span>;
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
@@ -142,7 +165,7 @@ export default function RegistrationPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-8">
 
-              {/* Required fields */}
+              {/* Names */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-bold text-black mb-2">First Name <span className="text-emerald-600">*</span></label>
@@ -154,6 +177,9 @@ export default function RegistrationPage() {
                 </div>
               </div>
 
+              
+
+              {/* Position & Organisation */}
               <div>
                 <label className="block text-sm font-bold text-black mb-2">Position / Title <span className="text-emerald-600">*</span></label>
                 <input type="text" value={position} onChange={(e) => setPosition(e.target.value)} placeholder="e.g. Director, Program Manager" className={inputClass} />
@@ -164,6 +190,7 @@ export default function RegistrationPage() {
                 <input type="text" value={organisation} onChange={(e) => setOrganisation(e.target.value)} placeholder="e.g. Ministry of Youth Development" className={inputClass} />
               </div>
 
+              {/* Contact */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-bold text-black mb-2">Phone Number <span className="text-emerald-600">*</span></label>
@@ -175,19 +202,26 @@ export default function RegistrationPage() {
                 </div>
               </div>
 
-              {/* Optional: Number of Guests */}
+              {/* Guest Category - Optional */}
               <div>
-                <label htmlFor="numberOfGuests" className="block text-sm font-bold text-black mb-2">
-                  Number of Guests {optionalLabel}
+                <label className="block text-sm font-bold text-black mb-2">
+                  Guest Category {optionalLabel}
                 </label>
-                <div className="flex items-center border border-black/70 rounded-sm w-36">
-                  <button type="button" onClick={() => setNumberOfGuests(Math.max(1, numberOfGuests - 1))} className="px-4 py-3 text-lg font-bold text-black hover:bg-gray-100 transition-colors select-none">−</button>
-                  <input id="numberOfGuests" type="number" min={1} max={10} value={numberOfGuests} onChange={(e) => setNumberOfGuests(Math.min(10, Math.max(1, Number(e.target.value))))} className="w-full text-center text-sm font-bold text-black bg-white outline-none py-3 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none" />
-                  <button type="button" onClick={() => setNumberOfGuests(Math.min(10, numberOfGuests + 1))} className="px-4 py-3 text-lg font-bold text-black hover:bg-gray-100 transition-colors select-none">+</button>
-                </div>
+                <select 
+                  value={guestCategory} 
+                  onChange={(e) => setGuestCategory(e.target.value)} 
+                  className={inputClass}
+                >
+                  <option value="">Select Category (Optional)</option>
+                  {guestCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              {/* Optional: Address */}
+              {/* Address Details */}
               <div className="border-t border-gray-100 pt-6 space-y-6">
                 <h3 className="text-md font-bold text-black uppercase tracking-wider">
                   Address Details {optionalLabel}

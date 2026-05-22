@@ -7,7 +7,7 @@ interface Registration {
   id: string;
   firstName: string;
   lastName: string;
-  numberOfGuests: number;
+  guestCategory?: string;        // Updated field
   position: string;
   organisation: string;
   country: string;
@@ -51,7 +51,6 @@ export default function AdminDashboard() {
       document.body.appendChild(link);
       link.click();
       
-      // Wait a moment before cleanup to ensure download starts
       setTimeout(() => {
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
@@ -74,6 +73,8 @@ export default function AdminDashboard() {
       router.push("/admin/login");
     } catch (err) {
       console.error("Logout error:", err);
+    } finally {
+      setLoggingOut(false);
     }
   };
 
@@ -159,7 +160,7 @@ export default function AdminDashboard() {
                     Last Name
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
-                    Guests
+                    Guest Category
                   </th>
                   <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
                     Email
@@ -190,8 +191,14 @@ export default function AdminDashboard() {
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {reg.lastName}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {reg.numberOfGuests}
+                    <td className="px-6 py-4 text-sm">
+                      {reg.guestCategory ? (
+                        <span className="font-medium text-emerald-700">
+                          {reg.guestCategory}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 italic">Not Selected</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {reg.email}

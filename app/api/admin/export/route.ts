@@ -13,15 +13,15 @@ export async function GET() {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet("Registrations");
 
-    // Add headers
+    // Add headers (Updated for Guest Category)
     worksheet.columns = [
       { header: "First Name", key: "firstName", width: 15 },
       { header: "Last Name", key: "lastName", width: 15 },
-      { header: "Guests", key: "numberOfGuests", width: 8 },
+      { header: "Guest Category", key: "guestCategory", width: 25 },
       { header: "Email", key: "email", width: 25 },
       { header: "Phone", key: "phone", width: 18 },
       { header: "Position", key: "position", width: 18 },
-      { header: "Organisation", key: "organisation", width: 20 },
+      { header: "Organisation", key: "organisation", width: 25 },
       { header: "Country", key: "country", width: 15 },
       { header: "State", key: "state", width: 15 },
       { header: "City", key: "city", width: 15 },
@@ -43,7 +43,7 @@ export async function GET() {
       worksheet.addRow({
         firstName: reg.firstName,
         lastName: reg.lastName,
-        numberOfGuests: reg.numberOfGuests,
+        guestCategory: reg.guestCategory || "Not Selected",   // Updated
         email: reg.email,
         phone: reg.phone,
         position: reg.position,

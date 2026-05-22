@@ -31,12 +31,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid phone number format" }, { status: 400 });
   }
 
-  const numberOfGuests =
-    typeof body.number_of_guests === "number" && body.number_of_guests >= 1
-      ? Math.min(Math.floor(body.number_of_guests), 10)
-      : 1;
+  // Guest Category is optional
+  const guestCategory = typeof body.guest_category === "string" 
+    ? body.guest_category.trim() 
+    : null;
 
-  // Address is optional — read whatever was provided, default missing pieces to ""
+  // Address is optional
   const address =
     body.address && typeof body.address === "object"
       ? (body.address as Record<string, unknown>)
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       data: {
         firstName: (body.first_name as string).trim(),
         lastName: (body.last_name as string).trim(),
-        numberOfGuests,
+        guestCategory,                    // New field
         position: (body.position as string).trim(),
         organisation: (body.organisation as string).trim(),
         country: str(address.country),
@@ -63,7 +63,11 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { success: true, message: "Registration submitted successfully", id: registration.id },
+      { 
+        success: true, 
+        message: "Registration submitted successfully", 
+        id: registration.id 
+      },
       { status: 201 }
     );
   } catch (error) {
@@ -75,8 +79,14 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const registrations = await prisma.registration.findMany({ orderBy: { createdAt: "desc" } });
-    return NextResponse.json({ success: true, count: registrations.length, data: registrations });
+    const registrations = await prisma.registration.findMany({ 
+      orderBy: { createdAt: "desc" } 
+    });
+    return NextResponse.json({ 
+      success: true, 
+      count: registrations.length, 
+      data: registrations 
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ error: `Failed to fetch registrations: ${message}` }, { status: 500 });
