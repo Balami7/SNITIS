@@ -22,17 +22,17 @@ export async function GET(request: NextRequest) {
       id: reg.id,
       first_name: reg.firstName,
       last_name: reg.lastName,
-      guest_category: reg.guestCategory,        // Updated field
+      guest_category: reg.guestCategory,        // Required field
       position: reg.position,
       organisation: reg.organisation,
       phone: reg.phone,
       email: reg.email,
       address: {
-        country: reg.country,
-        state: reg.state,
-        city: reg.city,
-        building_apart: reg.buildingApart,
-        street: reg.street,
+        country: reg.country || "",
+        state: reg.state || "",
+        city: reg.city || "",
+        building_apart: reg.buildingApart || "",
+        street: reg.street || "",
       },
       created_at: reg.createdAt.toISOString(),
     }));

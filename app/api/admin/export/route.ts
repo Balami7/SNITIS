@@ -13,19 +13,19 @@ export async function GET() {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet("Registrations");
 
-    // Add headers (Updated for Guest Category)
+    // Add headers
     worksheet.columns = [
       { header: "First Name", key: "firstName", width: 15 },
       { header: "Last Name", key: "lastName", width: 15 },
-      { header: "Guest Category", key: "guestCategory", width: 25 },
+      { header: "Guest Category", key: "guestCategory", width: 30 },
       { header: "Email", key: "email", width: 25 },
       { header: "Phone", key: "phone", width: 18 },
-      { header: "Position", key: "position", width: 18 },
-      { header: "Organisation", key: "organisation", width: 25 },
+      { header: "Position", key: "position", width: 20 },
+      { header: "Organisation", key: "organisation", width: 30 },
       { header: "Country", key: "country", width: 15 },
       { header: "State", key: "state", width: 15 },
       { header: "City", key: "city", width: 15 },
-      { header: "Street", key: "street", width: 20 },
+      { header: "Street", key: "street", width: 25 },
       { header: "Building/Apt", key: "buildingApart", width: 15 },
       { header: "Registration Date", key: "createdAt", width: 18 },
     ];
@@ -43,16 +43,16 @@ export async function GET() {
       worksheet.addRow({
         firstName: reg.firstName,
         lastName: reg.lastName,
-        guestCategory: reg.guestCategory || "Not Selected",   // Updated
+        guestCategory: reg.guestCategory,           // Now required - no fallback needed
         email: reg.email,
         phone: reg.phone,
         position: reg.position,
         organisation: reg.organisation,
-        country: reg.country,
-        state: reg.state,
-        city: reg.city,
-        street: reg.street,
-        buildingApart: reg.buildingApart,
+        country: reg.country || "",
+        state: reg.state || "",
+        city: reg.city || "",
+        street: reg.street || "",
+        buildingApart: reg.buildingApart || "",
         createdAt: new Date(reg.createdAt).toLocaleDateString(),
       });
     });

@@ -40,7 +40,7 @@ export default function RegistrationPage() {
   const [buildingApart, setBuildingApart] = useState("");
   const [street, setStreet] = useState("");
 
-  // Optional label component
+  // Optional label component (kept for address section)
   const optionalLabel = <span className="text-black/40 font-normal text-xs ml-1">(optional)</span>;
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export default function RegistrationPage() {
   const validateForm = () => {
     if (!firstName.trim()) return "First name is required";
     if (!lastName.trim()) return "Last name is required";
+    if (!guestCategory.trim()) return "Guest Category is required";
     if (!position.trim()) return "Position is required";
     if (!organisation.trim()) return "Organisation is required";
     if (!phone.trim()) return "Phone number is required";
@@ -82,7 +83,7 @@ export default function RegistrationPage() {
     const payload = {
       first_name: firstName,
       last_name: lastName,
-      guest_category: guestCategory || null,
+      guest_category: guestCategory,
       position,
       organisation,
       address: {
@@ -177,7 +178,24 @@ export default function RegistrationPage() {
                 </div>
               </div>
 
-              
+              {/* Guest Category - Now Required */}
+              <div>
+                <label className="block text-sm font-bold text-black mb-2">
+                  Guest Category <span className="text-emerald-600">*</span>
+                </label>
+                <select 
+                  value={guestCategory} 
+                  onChange={(e) => setGuestCategory(e.target.value)} 
+                  className={inputClass}
+                >
+                  <option value="">Select Guest Category</option>
+                  {guestCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               {/* Position & Organisation */}
               <div>
@@ -200,25 +218,6 @@ export default function RegistrationPage() {
                   <label className="block text-sm font-bold text-black mb-2">Email Address <span className="text-emerald-600">*</span></label>
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={inputClass} />
                 </div>
-              </div>
-
-              {/* Guest Category - Optional */}
-              <div>
-                <label className="block text-sm font-bold text-black mb-2">
-                  Guest Category {optionalLabel}
-                </label>
-                <select 
-                  value={guestCategory} 
-                  onChange={(e) => setGuestCategory(e.target.value)} 
-                  className={inputClass}
-                >
-                  <option value="">Select Category (Optional)</option>
-                  {guestCategories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
               </div>
 
               {/* Address Details */}

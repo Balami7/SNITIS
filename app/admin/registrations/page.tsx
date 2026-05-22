@@ -7,7 +7,7 @@ interface Registration {
   id: string;
   firstName: string;
   lastName: string;
-  guestCategory?: string;        // Updated field
+  guestCategory: string;        // Now required
   position: string;
   organisation: string;
   country: string;
@@ -192,13 +192,9 @@ export default function AdminDashboard() {
                       {reg.lastName}
                     </td>
                     <td className="px-6 py-4 text-sm">
-                      {reg.guestCategory ? (
-                        <span className="font-medium text-emerald-700">
-                          {reg.guestCategory}
-                        </span>
-                      ) : (
-                        <span className="text-gray-400 italic">Not Selected</span>
-                      )}
+                      <span className="font-medium text-emerald-700">
+                        {reg.guestCategory}
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {reg.email}

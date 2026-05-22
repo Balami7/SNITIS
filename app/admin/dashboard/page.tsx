@@ -7,7 +7,7 @@ interface RegistrationRecord {
   id: string;
   first_name: string;
   last_name: string;
-  guest_category?: string;        // New field - optional
+  guest_category: string;        // Now required
   position: string;
   organisation: string;
   address: {
@@ -97,7 +97,7 @@ export default function AdminDashboardPage() {
     const rows = records.map(r => [
       `"${r.first_name.replace(/"/g, '""')}"`,
       `"${r.last_name.replace(/"/g, '""')}"`,
-      `"${r.guest_category || 'Not Selected'}"`,
+      `"${r.guest_category.replace(/"/g, '""')}"`,           // Now required
       `"${r.position.replace(/"/g, '""')}"`,
       `"${r.organisation.replace(/"/g, '""')}"`,
       `"${r.email.replace(/"/g, '""')}"`,
@@ -236,11 +236,9 @@ export default function AdminDashboardPage() {
                         </div>
                       </td>
                       <td className="p-4 print:p-2 text-center font-medium">
-                        {attendee.guest_category ? (
-                          <span className="text-emerald-700">{attendee.guest_category}</span>
-                        ) : (
-                          <span className="text-black/40 italic">Not Selected</span>
-                        )}
+                        <span className="text-emerald-700">
+                          {attendee.guest_category}
+                        </span>
                       </td>
                     </tr>
                   ))}

@@ -14,7 +14,7 @@ model Registration {
   id            String   @id @default(cuid())
   firstName     String
   lastName      String
-  guestCategory String?   
+  guestCategory String   
   position      String
   organisation  String
   country       String

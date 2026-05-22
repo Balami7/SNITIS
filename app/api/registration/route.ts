@@ -13,16 +13,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const requiredFields = ["first_name", "last_name", "position", "organisation", "phone", "email"] as const;
+  // Updated: guest_category is now required
+  const requiredFields = [
+    "first_name", 
+    "last_name", 
+    "guest_category", 
+    "position", 
+    "organisation", 
+    "phone", 
+    "email"
+  ] as const;
+
   for (const field of requiredFields) {
     const v = body[field];
     if (typeof v !== "string" || !v.trim()) {
-      return NextResponse.json({ error: `Missing or invalid required field: ${field}` }, { status: 400 });
+      return NextResponse.json({ 
+        error: `Missing or invalid required field: ${field}` 
+      }, { status: 400 });
     }
   }
 
   const email = (body.email as string).trim();
   const phone = (body.phone as string).trim();
+  const guestCategory = (body.guest_category as string).trim();
 
   if (!/\S+@\S+\.\S+/.test(email)) {
     return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
@@ -30,11 +43,6 @@ export async function POST(request: NextRequest) {
   if (!/^\+?[0-9\s\-]{7,15}$/.test(phone)) {
     return NextResponse.json({ error: "Invalid phone number format" }, { status: 400 });
   }
-
-  // Guest Category is optional
-  const guestCategory = typeof body.guest_category === "string" 
-    ? body.guest_category.trim() 
-    : null;
 
   // Address is optional
   const address =
@@ -49,7 +57,7 @@ export async function POST(request: NextRequest) {
       data: {
         firstName: (body.first_name as string).trim(),
         lastName: (body.last_name as string).trim(),
-        guestCategory,                    // New field
+        guestCategory,                    // Now required
         position: (body.position as string).trim(),
         organisation: (body.organisation as string).trim(),
         country: str(address.country),
