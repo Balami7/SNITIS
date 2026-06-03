@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Country, State, City } from "country-state-city";
 
 const guestCategories = [
@@ -44,14 +44,16 @@ export default function RegistrationPage() {
   // Optional label component (kept for address section)
   const optionalLabel = <span className="text-black/40 font-normal text-xs ml-1">(optional)</span>;
 
-  useEffect(() => {
+  const handleCountryChange = (code: string) => {
+    setSelectedCountry(code);
     setSelectedState("");
     setSelectedCity("");
-  }, [selectedCountry]);
+  };
 
-  useEffect(() => {
-    if (selectedState) setSelectedCity("");
-  }, [selectedState]);
+  const handleStateChange = (code: string) => {
+    setSelectedState(code);
+    setSelectedCity("");
+  };
 
   const validateForm = () => {
     if (!firstName.trim()) return "First name is required";
@@ -233,7 +235,7 @@ export default function RegistrationPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-black mb-2">Country</label>
-                    <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className={inputClass}>
+                    <select value={selectedCountry} onChange={(e) => handleCountryChange(e.target.value)} className={inputClass}>
                       <option value="">Select Country</option>
                       {Country.getAllCountries().map((country) => (
                         <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
