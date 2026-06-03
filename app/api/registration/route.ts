@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { sendRegistrationEmail } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   let body: Record<string, unknown>;
@@ -15,20 +16,20 @@ export async function POST(request: NextRequest) {
   }
 
   const requiredFields = [
-    "first_name", 
-    "last_name", 
-    "guest_category", 
-    "position", 
-    "organisation", 
-    "phone", 
+    "first_name",
+    "last_name",
+    "guest_category",
+    "position",
+    "organisation",
+    "phone",
     "email"
   ] as const;
 
   for (const field of requiredFields) {
     const v = body[field];
     if (typeof v !== "string" || !v.trim()) {
-      return NextResponse.json({ 
-        error: `Missing or invalid required field: ${field}` 
+      return NextResponse.json({
+        error: `Missing or invalid required field: ${field}`
       }, { status: 400 });
     }
   }
@@ -86,11 +87,24 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Send confirmation email — don't fail the request if email errors
+    try {
+      await sendRegistrationEmail({
+        email: registration.email,
+        firstName: registration.firstName,
+        lastName: registration.lastName,
+        guestCategory: registration.guestCategory,
+        organisation: registration.organisation,
+      });
+    } catch (emailError) {
+      console.error("Failed to send confirmation email:", emailError);
+    }
+
     return NextResponse.json(
-      { 
-        success: true, 
-        message: "Registration submitted successfully", 
-        id: registration.id 
+      {
+        success: true,
+        message: "Registration submitted successfully",
+        id: registration.id
       },
       { status: 201 }
     );
@@ -113,13 +127,13 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const registrations = await prisma.registration.findMany({ 
-      orderBy: { createdAt: "desc" } 
+    const registrations = await prisma.registration.findMany({
+      orderBy: { createdAt: "desc" }
     });
-    return NextResponse.json({ 
-      success: true, 
-      count: registrations.length, 
-      data: registrations 
+    return NextResponse.json({
+      success: true,
+      count: registrations.length,
+      data: registrations
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
