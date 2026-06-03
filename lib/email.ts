@@ -23,12 +23,14 @@ export async function sendRegistrationEmail(data: RegistrationEmailData) {
   return transport.sendMail({
     from: process.env.EMAIL_FROM ?? '"SNITIS" <noreply@scancode.ng>',
     to: email,
-    subject: "Registration Confirmed",
+    subject: "Thank you for successful registration: The Launch of National Compendium",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
-        <h2 style="color: #0a3d62;">Registration Confirmed</h2>
+        <p>This is the confirmation mail.</p>
         <p>Dear ${firstName} ${lastName},</p>
-        <p>Thank you for registering. We have successfully received your details:</p>
+        <p>Thank you for successful registration: The Launch of National Compendium:
+          <strong>"Nigeria: Documenting the Economic and Tourism Profiles of 36 States and FCT"</strong>
+        </p>
         <table style="border-collapse: collapse; margin: 16px 0;">
           <tr>
             <td style="padding: 6px 12px; font-weight: bold;">Category</td>
@@ -39,8 +41,7 @@ export async function sendRegistrationEmail(data: RegistrationEmailData) {
             <td style="padding: 6px 12px;">${organisation}</td>
           </tr>
         </table>
-        <p>We look forward to seeing you at the event.</p>
-        <p style="margin-top: 24px; color: #555;">Best regards,<br/>The SNITIS Team</p>
+        <p style="margin-top: 24px; color: #555;">Regards,<br/>08037041001 and 08033497750</p>
       </div>
     `,
   });
