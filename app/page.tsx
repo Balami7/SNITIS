@@ -105,11 +105,14 @@ export default function RegistrationPage() {
         body: JSON.stringify(payload),
       });
 
-      if (res.ok) {
-        setSuccessMessage("Successful. Thank you for registering.");
-        setTimeout(() => window.location.reload(), 3000);
-        return;
+      if (res.ok) { 
+        setSuccessMessage(`Successfully submitted; an email has been sent to ${email}`); 
+        setTimeout(() => window.location.reload(), 3000); 
+        return; 
       }
+
+
+     
 
       const data = await res.json().catch(() => ({}));
       setError(data.error ?? "Submission failed. Please try again.");
