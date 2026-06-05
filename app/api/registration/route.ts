@@ -45,19 +45,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid phone number format" }, { status: 400 });
   }
 
-  // 1. Initial check to PREVENT DUPLICATES
+  // 1. Block only an exact duplicate (same email AND phone = the same person
+  // re-submitting). Delegates who share an organisation's email or phone can
+  // still register individually.
   const existingRegistration = await prisma.registration.findFirst({
     where: {
-      OR: [
-        { email: email },
-        { phone: phone }
-      ]
+      email: email,
+      phone: phone,
     }
   });
 
   if (existingRegistration) {
     return NextResponse.json(
-      { error: "This email or phone number is already registered" },
+      { error: "You have already registered with this email and phone number" },
       { status: 409 }
     );
   }
