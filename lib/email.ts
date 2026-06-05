@@ -29,7 +29,7 @@ export async function sendRegistrationEmail(data: RegistrationEmailData) {
     to: email,
     subject: "Thank you for successful registration: The Launch of National Compendium",
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0; color: #1a1a1a;">
         <p>This is the confirmation mail.</p>
         <p>Dear ${firstName} ${lastName},</p>
         <p>Thank you for successful registration: The Launch of National Compendium:
