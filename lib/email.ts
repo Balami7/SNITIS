@@ -7,6 +7,10 @@ const transport = nodemailer.createTransport({
     user: process.env.ZEPTOMAIL_USER,
     pass: process.env.ZEPTOMAIL_PASS,
   },
+  // Don't let a stalled SMTP connection hang the registration request
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
 });
 
 type RegistrationEmailData = {
